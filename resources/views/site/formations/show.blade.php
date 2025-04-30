@@ -22,15 +22,24 @@
                                 <a href="{{ route('formations.categorie', $formation->categorie->slug) }}" class="text-sm text-gray-500 hover:text-custom-primary">
                                     <i class="fas fa-folder-open mr-1"></i> {{ $formation->categorie->nom }}
                                 </a>
-                                @if($formation->duree_jours)
-                                    <span class="mx-2 text-gray-300">|</span>
-                                    <span class="text-sm text-gray-500">
-                                        <i class="far fa-clock mr-1"></i> {{ $formation->duree_jours }} jours
-                                    </span>
-                                @endif
                             </div>
                             
                             <h1 class="text-3xl font-bold mb-4">{{ $formation->titre }}</h1>
+                            
+                            <div class="flex flex-wrap items-center gap-3 mb-6">
+                                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium {{ $formation->getFormatBgColor() }}">
+                                    <i class="fas {{ $formation->getFormatIcon() }} mr-1"></i> {{ ucfirst($formation->format) }}
+                                </span>
+                                
+                                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium {{ $formation->getNiveauBgColor() }}">
+                                    <i class="fas {{ $formation->getNiveauIcon() }} mr-1"></i> Niveau {{ ucfirst($formation->niveau_requis) }}
+                                </span>
+                                
+                                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium {{ $formation->isComplet() ? 'bg-red-100 text-red-800' : ($formation->isPresqueComplet() ? 'bg-yellow-100 text-yellow-800' : 'bg-green-100 text-green-800') }}">
+                                    <i class="fas {{ $formation->isComplet() ? 'fa-user-times' : ($formation->isPresqueComplet() ? 'fa-user-clock' : 'fa-user-check') }} mr-1"></i> 
+                                    {{ $formation->isComplet() ? 'Complet' : ($formation->isPresqueComplet() ? 'Places limitées' : 'Places disponibles') }}
+                                </span>
+                            </div>
                             
                             @if($formation->description)
                                 <div class="prose prose-lg max-w-none mb-8">
@@ -133,9 +142,14 @@
                             </div>
                             
                             <div>
-                                <label for="ville_commune" class="form-label">Ville/Commune <span class="text-red-500">*</span></label>
-                                <input type="text" id="ville_commune" name="ville_commune" value="{{ old('ville_commune') }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-custom-primary" required>
-                                @error('ville_commune')
+                                <label for="ville_id" class="form-label">Ville/Commune <span class="text-red-500">*</span></label>
+                                <select id="ville_id" name="ville_id" class="ville-select2 w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-custom-primary" required>
+                                    <option value="">Sélectionnez une ville</option>
+                                    @foreach($villes as $ville)
+                                        <option value="{{ $ville->id }}" {{ old('ville_id') == $ville->id ? 'selected' : '' }}>{{ $ville->nom }}</option>
+                                    @endforeach
+                                </select>
+                                @error('ville_id')
                                     <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                                 @enderror
                             </div>
@@ -204,3 +218,91 @@
         </div>
     </section>
 @endsection 
+
+@push('styles')
+<!-- Select2 CSS -->
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<style>
+    .select2-container--default .select2-selection--single {
+        height: 42px;
+        padding: 6px 0;
+        border: 1px solid #d1d5db;
+        border-radius: 0.5rem;
+    }
+    
+    .select2-container--default .select2-selection--single .select2-selection__rendered {
+        line-height: 28px;
+        color: #111827;
+        padding-left: 15px;
+    }
+    
+    .select2-container--default .select2-selection--single .select2-selection__arrow {
+        height: 42px;
+    }
+    
+    .select2-dropdown {
+        border-color: #d1d5db;
+        border-radius: 0.5rem;
+        overflow: hidden;
+    }
+    
+    .select2-container--default .select2-results__option--highlighted[aria-selected] {
+        background-color: var(--primary);
+    }
+    
+    .select2-search--dropdown .select2-search__field {
+        padding: 8px;
+        border-radius: 0.3rem;
+    }
+</style>
+@endpush
+
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        if (typeof jQuery == 'undefined') {
+            // Si jQuery n'est pas chargé, on le charge
+            var script = document.createElement('script');
+            script.src = 'https://code.jquery.com/jquery-3.6.4.min.js';
+            script.onload = function() {
+                // Une fois jQuery chargé, charger Select2
+                var select2Script = document.createElement('script');
+                select2Script.src = 'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js';
+                select2Script.onload = initSelect2;
+                document.head.appendChild(select2Script);
+            };
+            document.head.appendChild(script);
+        } else {
+            // Si jQuery est déjà chargé
+            if (typeof $.fn.select2 == 'undefined') {
+                // Si Select2 n'est pas chargé, on le charge
+                var select2Script = document.createElement('script');
+                select2Script.src = 'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js';
+                select2Script.onload = initSelect2;
+                document.head.appendChild(select2Script);
+            } else {
+                // Si Select2 est déjà chargé
+                initSelect2();
+            }
+        }
+        
+        function initSelect2() {
+            $('.ville-select2').select2({
+                placeholder: "Sélectionnez une ville",
+                allowClear: true,
+                width: '100%',
+                language: {
+                    noResults: function() {
+                        return "Aucune ville trouvée";
+                    }
+                }
+            });
+            
+            // Préserver la valeur sélectionnée après la soumission du formulaire s'il y a des erreurs
+            @if(old('ville_id'))
+                $('.ville-select2').val("{{ old('ville_id') }}").trigger('change');
+            @endif
+        }
+    });
+</script>
+@endpush 

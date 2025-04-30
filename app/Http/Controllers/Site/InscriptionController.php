@@ -25,7 +25,7 @@ class InscriptionController extends Controller
             'nom' => 'required|string|max:255',
             'prenoms' => 'required|string|max:255',
             'numero_cni' => 'nullable|string|max:255',
-            'ville_commune' => 'required|string|max:255',
+            'ville_id' => 'required|exists:villes,id',
             'contact' => 'required|string|max:255',
             'email' => 'nullable|email|max:255',
             'niveau_etude' => 'nullable|string|max:255',
@@ -49,8 +49,8 @@ class InscriptionController extends Controller
      */
     public function confirmation(Inscription $inscription): View
     {
-        // Charge la formation associée
-        $inscription->load('formation');
+        // Charge la formation associée et la ville
+        $inscription->load(['formation', 'ville']);
         
         return view('site.inscriptions.confirmation', compact('inscription'));
     }

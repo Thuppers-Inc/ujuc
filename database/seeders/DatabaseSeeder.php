@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
             FormationSeeder::class,
             FormationsSeeder::class,
             PartenairesSeeder::class,
+            VilleSeeder::class,
         ]);
     }
 }

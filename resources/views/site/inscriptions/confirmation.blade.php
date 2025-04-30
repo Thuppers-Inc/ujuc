@@ -37,7 +37,7 @@
                             </div>
                             <div>
                                 <p class="text-sm text-gray-500">Ville/Commune</p>
-                                <p class="font-medium">{{ $inscription->ville_commune }}</p>
+                                <p class="font-medium">{{ $inscription->ville->nom }}</p>
                             </div>
                         </div>
                         

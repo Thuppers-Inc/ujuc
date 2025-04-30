@@ -19,7 +19,7 @@ class Inscription extends Model
         'nom',
         'prenoms',
         'numero_cni',
-        'ville_commune',
+        'ville_id',
         'contact',
         'email',
         'niveau_etude',
@@ -46,6 +46,16 @@ class Inscription extends Model
     public function formation(): BelongsTo
     {
         return $this->belongsTo(Formation::class, 'formation_id');
+    }
+
+    /**
+     * Obtient la ville associée à cette inscription.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function ville(): BelongsTo
+    {
+        return $this->belongsTo(Ville::class, 'ville_id');
     }
 
     /**

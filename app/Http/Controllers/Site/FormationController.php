@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Site;
 use App\Http\Controllers\Controller;
 use App\Models\Categorie;
 use App\Models\Formation;
+use App\Models\Ville;
 use Illuminate\View\View;
 
 class FormationController extends Controller
@@ -51,6 +52,9 @@ class FormationController extends Controller
             ->take(3)
             ->get();
         
-        return view('site.formations.show', compact('formation', 'formationsSimilaires'));
+        // Récupérer toutes les villes par ordre alphabétique
+        $villes = Ville::orderBy('nom')->get();
+        
+        return view('site.formations.show', compact('formation', 'formationsSimilaires', 'villes'));
     }
 } 

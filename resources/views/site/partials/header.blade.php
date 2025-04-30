@@ -3,15 +3,16 @@
         <div class="flex items-center justify-between">
             <!-- Logo -->
             <a href="{{ route('home') }}" class="flex items-center">
-                <span class="text-2xl font-bold text-custom-primary">Un Jeune Une Compétence</span>
+                {{-- <span class="text-2xl font-bold text-custom-primary">Un Jeune Une Compétence</span> --}}
+                <img src="{{asset('img/logo.png')}}" alt="" style="height: 100px;"  class="mr-2">
             </a>
             
             <!-- Navigation principale (desktop) -->
             <nav class="hidden md:flex space-x-6">
-                <a href="{{ route('home') }}" class="text-gray-700 hover:text-custom-primary font-medium">Accueil</a>
-                <a href="{{ route('formations.index') }}" class="text-gray-700 hover:text-custom-primary font-medium">Formations</a>
-                <a href="#" class="text-gray-700 hover:text-custom-primary font-medium">À propos</a>
-                <a href="{{ route('contact') }}" class="text-gray-700 hover:text-custom-primary font-medium">Contact</a>
+                <a href="{{ route('home') }}" class="{{ request()->routeIs('home') ? 'text-custom-primary font-semibold' : 'text-gray-700 hover:text-custom-primary font-medium' }}">Accueil</a>
+                <a href="{{ route('formations.index') }}" class="{{ request()->routeIs('formations.*') ? 'text-custom-primary font-semibold' : 'text-gray-700 hover:text-custom-primary font-medium' }}">Formations</a>
+                <a href="#" class="{{ request()->routeIs('about') ? 'text-custom-primary font-semibold' : 'text-gray-700 hover:text-custom-primary font-medium' }}">À propos</a>
+                <a href="{{ route('contact') }}" class="{{ request()->routeIs('contact') ? 'text-custom-primary font-semibold' : 'text-gray-700 hover:text-custom-primary font-medium' }}">Contact</a>
             </nav>
             
             <!-- Bouton de menu mobile -->
@@ -27,10 +28,10 @@
         <!-- Menu mobile (initialement caché) -->
         <div class="md:hidden hidden mt-4" id="mobile-menu">
             <nav class="flex flex-col space-y-3">
-                <a href="{{ route('home') }}" class="text-gray-700 hover:text-custom-primary font-medium py-2">Accueil</a>
-                <a href="{{ route('formations.index') }}" class="text-gray-700 hover:text-custom-primary font-medium py-2">Formations</a>
-                <a href="#" class="text-gray-700 hover:text-custom-primary font-medium py-2">À propos</a>
-                <a href="{{ route('contact') }}" class="text-gray-700 hover:text-custom-primary font-medium py-2">Contact</a>
+                <a href="{{ route('home') }}" class="{{ request()->routeIs('home') ? 'text-custom-primary font-semibold py-2' : 'text-gray-700 hover:text-custom-primary font-medium py-2' }}">Accueil</a>
+                <a href="{{ route('formations.index') }}" class="{{ request()->routeIs('formations.*') ? 'text-custom-primary font-semibold py-2' : 'text-gray-700 hover:text-custom-primary font-medium py-2' }}">Formations</a>
+                <a href="#" class="{{ request()->routeIs('about') ? 'text-custom-primary font-semibold py-2' : 'text-gray-700 hover:text-custom-primary font-medium py-2' }}">À propos</a>
+                <a href="{{ route('contact') }}" class="{{ request()->routeIs('contact') ? 'text-custom-primary font-semibold py-2' : 'text-gray-700 hover:text-custom-primary font-medium py-2' }}">Contact</a>
             </nav>
         </div>
     </div>

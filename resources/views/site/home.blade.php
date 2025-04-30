@@ -184,11 +184,11 @@
                     <h5 class="text-custom-primary font-semibold mb-2 bg-white bg-opacity-10 inline-block px-3 py-1 rounded-full">Transformez votre avenir</h5>
                     <h1 class="text-4xl md:text-5xl font-bold mb-4 leading-tight">Propulsez votre <span class="text-custom-primary">carrière</span> avec nos formations</h1>
                     <p class="text-xl mb-8 text-gray-100 leading-relaxed">
-                        Acquérez des compétences recherchées sur le marché du travail et boostez votre employabilité. Nos formations pratiques sont conçues pour votre réussite professionnelle.
+                        Acquérez des compétences recherchées sur le marché du travail et boostez votre employabilité. Nos formations sont conçues pour faciliter votre insertion professionnelle.
                     </p>
                     <div class="flex flex-col sm:flex-row gap-4">
                         <a href="{{ route('formations.index') }}" class="btn-custom-primary">
-                            Découvrir nos formations
+                            Je m'inscris
                         </a>
                         <a href="#categories" class="btn-custom-secondary">
                             En savoir plus

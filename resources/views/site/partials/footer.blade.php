@@ -3,8 +3,12 @@
         <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
             <!-- Logo et description -->
             <div class="col-span-1 md:col-span-2">
+                <div class="mb-3" style="background-color: #fefefe; width: 90px; padding: 5px; border-radius: 15px;">
+
+                    <img src="{{asset('img/logo.png')}}" alt="" class="img-fluid" style="width: 90px;">
+                </div>
                 <h3 class="text-xl font-bold mb-4">Un Jeune Une Compétence</h3>
-                <p class="text-gray-300 mb-4">
+                <p class="text-gray-300 mb-4" style="max-width: 350px;">
                     Des formations pour tous les horizons. Développez vos compétences grâce à nos programmes axés sur les besoins du marché.
                 </p>
                 <div class="flex space-x-4">

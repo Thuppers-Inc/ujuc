@@ -1,61 +1,284 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Un Jeune Une Compétence - Documentation
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## Vue d'ensemble
 
-## About Laravel
+"Un Jeune Une Compétence" est une plateforme de formation professionnelle conçue pour faciliter l'insertion des jeunes sur le marché du travail. Cette application web permet aux utilisateurs de découvrir, consulter et s'inscrire à diverses formations classées par catégories.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Fonctionnalités principales
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### 1. Catalogue de formations
+- Présentation des formations par catégories
+- Mise en avant des formations populaires
+- Filtrage par type de formation, durée et prix
+- Affichage détaillé de chaque formation
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### 2. Système d'inscription
+- Formulaire d'inscription simple et intuitif
+- Vérification des places disponibles
+- Confirmation par email
 
-## Learning Laravel
+### 3. Espace utilisateur
+- Suivi des formations
+- Historique des inscriptions
+- Documents de formation téléchargeables
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### 4. Popup d'alerte
+- Alerte de sécurité concernant les inscriptions
+- Stockage de préférence utilisateur via localStorage
+- Animation et design moderne
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+## Installation
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### Prérequis
+- PHP 8.1+
+- Composer
+- Node.js et NPM
+- MySQL ou MariaDB
 
-## Laravel Sponsors
+### Étapes d'installation
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+1. Cloner le dépôt
+```bash
+git clone https://github.com/votre-compte/ujuc.git
+cd ujuc
+```
 
-### Premium Partners
+2. Installer les dépendances
+```bash
+composer install
+npm install
+```
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development/)**
-- **[Active Logic](https://activelogic.com)**
+3. Configurer l'environnement
+```bash
+cp .env.example .env
+php artisan key:generate
+```
 
-## Contributing
+4. Configurer la base de données dans le fichier `.env`
+```
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=ujuc
+DB_USERNAME=root
+DB_PASSWORD=
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+5. Migrer et alimenter la base de données
+```bash
+php artisan migrate --seed
+```
 
-## Code of Conduct
+6. Lier le stockage
+```bash
+php artisan storage:link
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+7. Compiler les assets
+```bash
+npm run dev
+```
 
-## Security Vulnerabilities
+8. Démarrer le serveur
+```bash
+php artisan serve
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+## Structure du projet
 
-## License
+```
+ujuc/
+├── app/                  # Logique de l'application
+│   ├── Http/             # Contrôleurs et Middleware
+│   ├── Models/           # Modèles Eloquent
+│   └── Services/         # Services métier
+├── config/               # Configuration
+├── database/             # Migrations et seeds
+├── public/               # Fichiers accessibles publiquement
+├── resources/            # Vues, assets non compilés
+│   ├── js/               # JavaScript
+│   ├── css/              # CSS/SCSS
+│   └── views/            # Templates Blade
+│       ├── admin/        # Interface d'administration
+│       └── site/         # Frontend du site
+├── routes/               # Définition des routes
+└── storage/              # Fichiers uploadés, cache, logs
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## Guide d'administration
+
+### Ajout de nouvelles formations
+
+1. Accéder au panneau d'administration (/admin)
+2. Naviguer vers "Formations" > "Ajouter une formation"
+3. Remplir les informations requises :
+   - Titre et description
+   - Prix et durée
+   - Nombre de places disponibles
+   - Catégorie
+   - Image (dimension recommandée : 800x600px)
+4. Cliquer sur "Enregistrer"
+
+### Gestion des catégories
+
+1. Accéder à "Catégories" > "Liste des catégories"
+2. Pour ajouter une catégorie, cliquer sur "Nouvelle catégorie"
+3. Pour modifier, utiliser l'icône d'édition sur la ligne correspondante
+
+## Personnalisation
+
+### Styles et thème
+
+Les principales variables de couleur sont définies dans le fichier `resources/views/site/layouts/app.blade.php` :
+
+```css
+:root {
+    --primary: #F27438;    /* Orange */
+    --secondary: #26474E;  /* Bleu-vert foncé */
+    --dark: #18534F;       /* Vert foncé */
+    --light: #f8f9fa;      /* Gris très clair */
+    --accent: #ffd166;     /* Jaune */
+}
+```
+
+Modifiez ces valeurs pour changer le thème global du site.
+
+### Popup d'alerte de sécurité
+
+#### Comment désactiver le popup d'alerte
+
+**Option 1 : Désactivation temporaire via JavaScript**
+
+Dans le fichier `resources/views/site/layouts/app.blade.php`, modifiez le script comme suit :
+
+```javascript
+<script>
+    // Ajouter cette ligne pour désactiver le popup
+    var disableAlertPopup = true;
+    
+    function showModal() {
+        document.getElementById('alertModal').classList.add('active');
+    }
+    
+    function closeModal() {
+        document.getElementById('alertModal').classList.remove('active');
+        localStorage.setItem('alertModalClosed', 'true');
+    }
+    
+    document.addEventListener('DOMContentLoaded', function() {
+        // Modifier cette condition pour vérifier disableAlertPopup
+        if (!localStorage.getItem('alertModalClosed') && !disableAlertPopup) {
+            setTimeout(showModal, 800);
+        }
+    });
+</script>
+```
+
+**Option 2 : Suppression complète du popup**
+
+Pour supprimer définitivement le popup :
+
+1. Dans `resources/views/site/layouts/app.blade.php` :
+
+   a. Supprimer le code HTML du popup (lignes ~159-174) :
+   ```html
+   <!-- Popup Modal -->
+   <div class="modal-overlay" id="alertModal">
+       <!-- ... contenu du modal ... -->
+   </div>
+   ```
+
+   b. Supprimer le script JavaScript associé (lignes ~187-201) :
+   ```javascript
+   <script>
+       function showModal() { /* ... */ }
+       function closeModal() { /* ... */ }
+       document.addEventListener('DOMContentLoaded', function() { /* ... */ });
+   </script>
+   ```
+
+   c. Supprimer les styles CSS du popup (lignes ~78-157) :
+   ```css
+   /* Style pour le popup modal */
+   .modal-overlay { /* ... */ }
+   /* ... autres styles du popup ... */
+   ```
+
+## Déploiement en production
+
+### Préparation
+
+1. Optimiser pour la production
+```bash
+npm run build
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
+```
+
+2. Vérifier les permissions
+```bash
+chmod -R 775 storage bootstrap/cache
+chown -R www-data:www-data storage bootstrap/cache
+```
+
+### Configuration serveur recommandée
+
+- Serveur web : Nginx ou Apache
+- PHP-FPM 8.1+
+- Base de données : MySQL 8.0 ou MariaDB 10.5+
+- Certificat SSL (Let's Encrypt recommandé)
+
+## Maintenance
+
+### Mises à jour
+
+1. Récupérer les dernières modifications
+```bash
+git pull origin main
+```
+
+2. Mettre à jour les dépendances
+```bash
+composer update
+npm update
+```
+
+3. Migrer la base de données si nécessaire
+```bash
+php artisan migrate
+```
+
+4. Reconstruire les assets et vider les caches
+```bash
+npm run build
+php artisan optimize:clear
+php artisan optimize
+```
+
+### Sauvegarde
+
+Il est recommandé de sauvegarder régulièrement :
+- La base de données complète
+- Le dossier `storage/app`
+- Le fichier `.env`
+
+## Résolution des problèmes courants
+
+| Problème | Solution |
+|----------|----------|
+| Images non visibles | Vérifier que `php artisan storage:link` a été exécuté |
+| Erreurs 500 | Consulter les logs dans `storage/logs/laravel.log` |
+| Popup d'alerte apparaît malgré désactivation | Effacer le localStorage du navigateur |
+| Problèmes de performance | Vérifier l'optimisation des images et activer le cache |
+
+## Support et contact
+
+Pour toute question ou assistance technique, veuillez contacter :
+- Email : support@unjeuneunecompetence.org
+- Téléphone : +XXX XXX XXX
+
+---
+
+© 2023 Un Jeune Une Compétence. Tous droits réservés.

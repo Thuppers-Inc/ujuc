@@ -85,6 +85,8 @@ Jour 4 : Projet pratique
 - Mise en production",
                 'duree_jours' => 4,
                 'categorie_id' => $categories->where('nom', 'Informatique')->first()->id ?? $categories->first()->id,
+                'format' => 'présentiel',
+                'niveau_requis' => 'intermédiaire',
             ],
             [
                 'titre' => 'Leadership et gestion d\'équipe',
@@ -116,6 +118,8 @@ Jour 4 et 5 : Ateliers pratiques
 - Plan d'action personnalisé",
                 'duree_jours' => 5,
                 'categorie_id' => $categories->where('nom', 'Management')->first()->id ?? $categories->first()->id,
+                'format' => 'hybride',
+                'niveau_requis' => 'avancé',
             ],
             [
                 'titre' => 'Anglais professionnel - Niveau intermédiaire',
@@ -146,6 +150,8 @@ Chaque jour inclut:
 - Exercices individuels et évaluations régulières",
                 'duree_jours' => 15,
                 'categorie_id' => $categories->where('nom', 'Langues étrangères')->first()->id ?? $categories->first()->id,
+                'format' => 'distanciel',
+                'niveau_requis' => 'intermédiaire',
             ],
             [
                 'titre' => 'Stratégies de Marketing Digital',
@@ -179,6 +185,8 @@ Jour 4 : Analyse de données et optimisation
 Exercices pratiques tout au long de la formation avec application sur votre propre projet.",
                 'duree_jours' => 4,
                 'categorie_id' => $categories->where('nom', 'Marketing Digital')->first()->id ?? $categories->first()->id,
+                'format' => 'hybride',
+                'niveau_requis' => 'débutant',
             ],
             [
                 'titre' => 'Initiation à la poterie traditionnelle',
@@ -213,6 +221,8 @@ Chaque participant repartira avec ses créations après cuisson.
 Matériel et équipement fournis pendant la formation.",
                 'duree_jours' => 4,
                 'categorie_id' => $categories->where('nom', 'Artisanat')->first()->id ?? $categories->first()->id,
+                'format' => 'présentiel',
+                'niveau_requis' => 'débutant',
             ],
         ];
 

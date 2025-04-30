@@ -27,6 +27,16 @@
 - Stockage de préférence utilisateur via localStorage
 - Animation et design moderne
 
+### 5. Icônes dynamiques pour les catégories
+- Attribution automatique d'icônes FontAwesome en fonction du nom de la catégorie
+- Large correspondance de mots-clés pour une pertinence maximale
+- Icône par défaut pour les catégories sans correspondance spécifique
+
+### 6. Information sur le format et le niveau des formations
+- Badges visuels distinguant les formations présentielles, distancielles et hybrides
+- Indication claire du niveau requis (débutant, intermédiaire, avancé)
+- Icônes distinctives et codes couleur pour une identification rapide
+
 ## Installation
 
 ### Prérequis
@@ -115,6 +125,8 @@ ujuc/
 3. Remplir les informations requises :
    - Titre et description
    - Prix et durée
+   - Format (présentiel, distanciel, hybride)
+   - Niveau requis (débutant, intermédiaire, avancé)
    - Nombre de places disponibles
    - Catégorie
    - Image (dimension recommandée : 800x600px)
@@ -125,6 +137,44 @@ ujuc/
 1. Accéder à "Catégories" > "Liste des catégories"
 2. Pour ajouter une catégorie, cliquer sur "Nouvelle catégorie"
 3. Pour modifier, utiliser l'icône d'édition sur la ligne correspondante
+
+#### Icônes des catégories
+
+Les icônes sont automatiquement attribuées aux catégories en fonction de leur nom. Le système utilise deux niveaux d'association :
+
+1. **Correspondance exacte** pour les catégories principales :
+   - "AGRICULTURE/ELEVAGE" → icône tracteur (fa-tractor)
+   - "TECH-NUMERIQUE" → icône ordinateur portable et code (fa-laptop-code)
+   - "MÉTIERS MANUELS" → icône outils (fa-tools)
+   - "E-COMMERCE" → icône panier d'achat (fa-shopping-cart)
+   - "LOGISTIQUE/TRANSPORT" → icône camion (fa-truck)
+   - "TECHNOLOGIE" → icône microprocesseur (fa-microchip)
+   - "BATIMENT TRAVAUX PUBLICS" → icône casque de chantier (fa-hard-hat)
+   - "FINANCE COMPTA" → icône billet (fa-money-bill-wave)
+
+2. **Détection de mots-clés** pour les sous-catégories ou nouvelles catégories :
+   - Si "agriculture" est présent dans le nom → icône feuille (fa-leaf)
+   - Si "elevage" est présent dans le nom → icône cheval (fa-horse)
+   - Si "tech" est présent dans le nom → icône ordinateur portable et code (fa-laptop-code)
+   - Et ainsi de suite...
+
+Pour ajouter ou modifier la correspondance entre les noms de catégories et les icônes, modifiez la méthode `getIconClass()` dans le modèle `app/Models/Categorie.php`.
+
+### Formations avec Indicateurs de Format et Niveau
+
+Les formations affichent des indicateurs visuels de leur format et niveau requis :
+
+- **Formats disponibles**:
+  - Présentiel (badge bleu, icône d'immeuble)
+  - Distanciel (badge violet, icône d'ordinateur)
+  - Hybride (badge turquoise, icône de personnes)
+
+- **Niveaux requis**:
+  - Débutant (badge vert, icône de plante)
+  - Intermédiaire (badge jaune, icône de diplômé)
+  - Avancé (badge rouge, icône d'étoile)
+
+Pour modifier les icônes et les couleurs associées, voir les méthodes `getFormatIcon()`, `getFormatBgColor()`, `getNiveauIcon()` et `getNiveauBgColor()` dans le modèle `Formation`.
 
 ## Personnalisation
 
@@ -272,6 +322,8 @@ Il est recommandé de sauvegarder régulièrement :
 | Erreurs 500 | Consulter les logs dans `storage/logs/laravel.log` |
 | Popup d'alerte apparaît malgré désactivation | Effacer le localStorage du navigateur |
 | Problèmes de performance | Vérifier l'optimisation des images et activer le cache |
+| Icônes de catégorie incorrectes | Vérifier la méthode `getIconClass()` dans le modèle Categorie |
+| Badges de format/niveau non affichés | Exécuter la migration pour ajouter ces champs à la table formations |
 
 ## Support et contact
 

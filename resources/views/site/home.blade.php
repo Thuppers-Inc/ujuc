@@ -172,6 +172,77 @@
         background-image: radial-gradient(currentColor 1px, transparent 1px);
         background-size: 20px 20px;
     }
+
+    /* Styles pour les cartes partenaires */
+    .partner-card {
+        perspective: 1000px;
+        transform-style: preserve-3d;
+    }
+    
+    .partner-card .card-inner {
+        transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+    
+    .partner-card:hover .card-inner {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+    }
+    
+    .partner-card .logo-container {
+        transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+    
+    .partner-card:hover .logo-container {
+        transform: scale(1.05);
+    }
+    
+    .partner-card .overlay {
+        opacity: 0;
+        background: linear-gradient(to top, rgba(38, 71, 78, 0.85), transparent 70%);
+        transform: translateY(10px);
+        transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+    
+    .partner-card:hover .overlay {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    
+    .partner-card .partner-title {
+        position: relative;
+        transition: all 0.3s ease;
+    }
+    
+    .partner-card .partner-title:after {
+        content: '';
+        position: absolute;
+        width: 0;
+        height: 2px;
+        bottom: -4px;
+        left: 50%;
+        background-color: var(--primary);
+        transition: all 0.3s ease;
+        transform: translateX(-50%);
+    }
+    
+    .partner-card:hover .partner-title {
+        color: var(--primary);
+    }
+    
+    .partner-card:hover .partner-title:after {
+        width: 40px;
+    }
+    
+    .partner-card .action-button {
+        transform: translateY(20px);
+        opacity: 0;
+        transition: all 0.3s 0.1s ease;
+    }
+    
+    .partner-card:hover .action-button {
+        transform: translateY(0);
+        opacity: 1;
+    }
 </style>
 @endpush
 
@@ -263,7 +334,7 @@
                                      class="w-full h-full object-cover group-hover:scale-105 transition-all duration-500">
                             @else
                                 <div class="w-full h-full flex items-center justify-center bg-custom-secondary bg-opacity-10">
-                                    <i class="fas fa-book-open text-4xl text-custom-primary"></i>
+                                    <i class="fas {{ $categorie->getIconClass() }} text-4xl text-custom-primary"></i>
                                 </div>
                             @endif
                         </div>
@@ -330,15 +401,40 @@
                     </div>
                     
                     <div class="p-6 flex flex-col flex-grow">
-                        <div class="flex items-center justify-between mb-3">
+                        <div class="flex justify-between items-center mb-3">
                             <div class="flex items-center text-sm">
-                                <i class="far fa-calendar-alt text-custom-primary mr-2"></i>
-                                <span class="text-gray-600">{{ $formation->duree_jours }} jours</span>
+                                @if($formation->isComplet())
+                                    <span class="bg-red-100 text-red-800 text-xs font-semibold px-2.5 py-0.5 rounded-full">
+                                        Complet
+                                    </span>
+                                @elseif($formation->isPresqueComplet())
+                                    <span class="bg-amber-100 text-amber-800 text-xs font-semibold px-2.5 py-0.5 rounded-full">
+                                        Presque complet
+                                    </span>
+                                @endif
                             </div>
                             <div class="flex items-center text-sm">
                                 <i class="fas fa-users text-custom-primary mr-2"></i>
-                                <span class="text-gray-600">{{ $formation->places_disponibles }} places</span>
+                                <span class="text-gray-600">{{ $formation->getPlacesDisponibles() - $formation->getInscriptionsConfirmees() }} places restantes</span>
                             </div>
+                        </div>
+                        
+                        <!-- Indicateur de complétude -->
+                        <div class="w-full bg-gray-200 rounded-full h-1.5 mb-3">
+                            <div class="bg-custom-primary h-1.5 rounded-full" style="width: {{ $formation->getTauxOccupation() }}%"></div>
+                        </div>
+                        
+                        <!-- Badges format et niveau -->
+                        <div class="flex flex-wrap gap-2 mb-3">
+                            <span class="{{ $formation->getFormatBgColor() }} text-xs font-medium px-2.5 py-0.5 rounded flex items-center gap-1">
+                                <i class="fas {{ $formation->getFormatIcon() }}"></i>
+                                {{ ucfirst($formation->format) }}
+                            </span>
+                            
+                            <span class="{{ $formation->getNiveauBgColor() }} text-xs font-medium px-2.5 py-0.5 rounded flex items-center gap-1">
+                                <i class="fas {{ $formation->getNiveauIcon() }}"></i>
+                                Niveau {{ ucfirst($formation->niveau_requis) }}
+                            </span>
                         </div>
                         
                         <h3 class="text-xl font-semibold mb-2 text-custom-secondary hover:text-custom-primary transition-colors">
@@ -397,7 +493,7 @@
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                 <!-- Testimonial 1 -->
-                <div class="custom-card bg-gray-50 p-8 relative">
+                <div class="custom-card bg-white p-8 relative">
                     <div class="absolute -top-4 left-8 text-5xl text-custom-primary opacity-20">
                         <i class="fas fa-quote-left"></i>
                     </div>
@@ -418,7 +514,7 @@
                 </div>
 
                 <!-- Testimonial 2 -->
-                <div class="custom-card bg-gray-50 p-8 relative">
+                <div class="custom-card bg-white p-8 relative">
                     <div class="absolute -top-4 left-8 text-5xl text-custom-primary opacity-20">
                         <i class="fas fa-quote-left"></i>
                     </div>
@@ -428,7 +524,7 @@
                         </p>
                         <div class="flex items-center">
                             <div class="w-12 h-12 rounded-full bg-custom-secondary mr-4 overflow-hidden">
-                                <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Portrait" class="w-full h-full object-cover">
+                                <img src="https://randomuser.me/api/portraits/men/50.jpg" alt="Portrait" class="w-full h-full object-cover">
                             </div>
                             <div>
                                 <h4 class="font-bold text-custom-secondary">Moussa Konaté</h4>
@@ -439,7 +535,7 @@
                 </div>
 
                 <!-- Testimonial 3 -->
-                <div class="custom-card bg-gray-50 p-8 relative">
+                <div class="custom-card bg-white p-8 relative">
                     <div class="absolute -top-4 left-8 text-5xl text-custom-primary opacity-20">
                         <i class="fas fa-quote-left"></i>
                     </div>
@@ -462,8 +558,53 @@
         </div>
     </section>
 
+    <!-- Partenaires Section -->
+    <section class="py-16 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h5 class="text-custom-primary font-semibold mb-2">Ils nous font confiance</h5>
+                <h2 class="text-3xl md:text-4xl font-bold mb-4 text-custom-secondary">Nos partenaires</h2>
+                <p class="text-lg text-gray-600 max-w-3xl mx-auto">
+                    Nous collaborons avec des entreprises et des organisations de premier plan pour offrir des formations pertinentes et de qualité.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
+                <!-- Partner 1 -->
+                <a href="https://thuppers.com" target="_blank" class="custom-card bg-white p-6 flex items-center justify-center h-32">
+                    <div class="w-full h-full flex items-center justify-center">
+                        <img src="{{ asset('img/partners/thuppers-inc.png') }}" alt="Thuppers Inc" class="h-32">
+                        {{-- <span class="text-xl font-bold text-custom-secondary">Thuppers Inc</span> --}}
+                    </div>
+                </a>
+                
+                <!-- Partner 2 -->
+                <a href="https://agenceemploijeunes.ci/site/" target="_blank" class="custom-card bg-white p-6 flex items-center justify-center h-32">
+                    <div class="w-full h-full flex items-center justify-center">
+                        <img src="{{ asset('img/partners/aej.png') }}" alt="Agence Emploi Jeune" class="h-32">
+                    </div>
+                </a>
+                
+                <!-- Partner 3 -->
+                <a href="#https://inayagroup.com" target="_blank" class="custom-card bg-white p-6 flex items-center justify-center h-32">
+                    <div class="w-full h-full flex items-center justify-center">
+                        <img src="{{ asset('img/partners/inaya-group.png') }}" alt="INAYA GROUP" class="h-32">
+                    </div>
+                </a>
+                
+                
+            </div>
+            
+        </div>
+        <div class="text-center mt-12">
+            <a href="{{ route('contact') }}" class="text-custom-primary hover:text-custom-secondary transition-colors font-medium">
+                Devenir partenaire <i class="fas fa-arrow-right ml-2"></i>
+            </a>
+        </div>
+    </section>
+
     <!-- CTA Section -->
-    <section class="py-20 relative bg-custom-secondary">
+    {{-- <section class="py-20 relative bg-custom-secondary">
         <div class="absolute inset-0 opacity-10">
             <div class="absolute inset-0 bg-custom-primary opacity-20 pattern-dots"></div>
         </div>
@@ -485,5 +626,5 @@
                 </div>
             </div>
         </div>
-    </section>
+    </section> --}}
 @endsection 

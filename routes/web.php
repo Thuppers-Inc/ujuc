@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Site\FormationController;
 use App\Http\Controllers\Site\HomeController;
 use App\Http\Controllers\Site\InscriptionController;
+use App\Http\Controllers\Admin\PartenaireController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -64,6 +65,11 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::patch('/inscriptions/{inscription}/statut', [AdminInscriptionController::class, 'updateStatut'])->name('inscriptions.update-statut');
     Route::post('/inscriptions/{inscription}/confirmer', [AdminInscriptionController::class, 'updateStatut'])->name('inscriptions.confirmer');
     Route::post('/inscriptions/{inscription}/annuler', [AdminInscriptionController::class, 'updateStatut'])->name('inscriptions.annuler');
+    
+    // Gestion des partenaires
+    Route::resource('partenaires', PartenaireController::class)->parameters([
+        'partenaires' => 'partenaire'
+    ]);
     
     // Statistiques
     Route::get('/statistiques', [DashboardController::class, 'statistiques'])->name('statistiques');

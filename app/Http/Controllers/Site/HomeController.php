@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Site;
 use App\Http\Controllers\Controller;
 use App\Models\Categorie;
 use App\Models\Formation;
+use App\Models\Partenaire;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class HomeController extends Controller
@@ -16,12 +18,18 @@ class HomeController extends Controller
      */
     public function index(): View
     {
-        // Récupère toutes les catégories avec leurs formations et le compteur
-        $categories = Categorie::withCount('formations')->with('formations')->get();
+        // Récupérer les catégories avec le nombre de formations
+        $categories = Categorie::withCount('formations')->get();
         
-        // Récupère les formations mises en avant (on pourrait ajouter un champ "mise_en_avant" plus tard)
-        $formationsEnVedette = Formation::latest()->take(3)->get();
+        // Récupérer quelques formations en vedette
+        $formationsEnVedette = Formation::with('categorie')
+                                       ->inRandomOrder()
+                                       ->take(3)
+                                       ->get();
         
-        return view('site.home', compact('categories', 'formationsEnVedette'));
+        // Récupérer les partenaires actifs, triés par ordre
+        $partenaires = Partenaire::actifs()->get();
+        
+        return view('site.home', compact('categories', 'formationsEnVedette', 'partenaires'));
     }
 } 

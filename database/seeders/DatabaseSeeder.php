@@ -16,6 +16,7 @@ class DatabaseSeeder extends Seeder
             CategorieSeeder::class,
             FormationSeeder::class,
             FormationsSeeder::class,
+            PartenairesSeeder::class,
         ]);
     }
 }

@@ -209,6 +209,12 @@
                             </span>
                         @endif
                     </a>
+                    
+                    <a href="{{ route('admin.partenaires.index') }}" 
+                       class="sidebar-link {{ request()->routeIs('admin.partenaires.*') ? 'active' : '' }}">
+                        <i class="fas fa-handshake"></i>
+                        <span>Partenaires</span>
+                    </a>
                 </div>
                 
                 <!-- Analyse Section -->

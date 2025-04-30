@@ -97,4 +97,16 @@ class Inscription extends Model
     {
         return $this->nom . ' ' . $this->prenoms;
     }
+
+    /**
+     * Obtient le numéro d'inscription formaté.
+     *
+     * @return string
+     */
+    public function getNumeroInscription(): string
+    {
+        $annee = date('Y');
+        $formation_code = substr(strtoupper(preg_replace('/[^a-zA-Z0-9]/', '', $this->formation->titre)), 0, 3);
+        return sprintf('INS-%s-%s-%06d', $annee, $formation_code, $this->id);
+    }
 } 

@@ -13,6 +13,7 @@
                     </div>
                     <h1 class="text-3xl font-bold text-gray-800 mb-2">Merci pour votre inscription !</h1>
                     <p class="text-lg text-gray-600">Votre demande d'inscription a été enregistrée avec succès.</p>
+                    <p class="text-xl font-semibold text-primary-600 mt-2">№ {{ $inscription->getNumeroInscription() }}</p>
                 </div>
                 
                 <div class="border-t border-b border-gray-200 py-6 my-6">

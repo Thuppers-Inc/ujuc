@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Inscription;
 use App\Models\Formation;
+use App\Models\Ville;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Contracts\View\View;
@@ -15,15 +16,40 @@ class InscriptionController extends Controller
     /**
      * Affiche la liste des inscriptions.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Contracts\View\View
      */
-    public function index(): View
+    public function index(Request $request): View
     {
-        $inscriptions = Inscription::with('formation')
-            ->orderByDesc('created_at')
-            ->paginate(15);
-
-        return view('admin.inscriptions.index', compact('inscriptions'));
+        $query = Inscription::with(['formation', 'ville']);
+        
+        // Filtrage par ville si spécifié
+        if ($request->filled('ville_id')) {
+            $query->where('ville_id', $request->ville_id);
+        }
+        
+        // Filtrage par statut si spécifié
+        if ($request->filled('statut') && $request->statut !== 'all') {
+            $query->where('statut', $request->statut);
+        }
+        
+        // Recherche par nom/prénom/email si spécifié
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('nom', 'like', "%{$search}%")
+                  ->orWhere('prenoms', 'like', "%{$search}%")
+                  ->orWhere('email', 'like', "%{$search}%")
+                  ->orWhere('contact', 'like', "%{$search}%");
+            });
+        }
+        
+        $inscriptions = $query->orderByDesc('created_at')->paginate(15);
+        
+        // Récupérer toutes les villes pour le filtre
+        $villes = Ville::orderBy('nom')->get();
+        
+        return view('admin.inscriptions.index', compact('inscriptions', 'villes'));
     }
 
     /**
@@ -34,7 +60,7 @@ class InscriptionController extends Controller
      */
     public function show(Inscription $inscription): View
     {
-        $inscription->load('formation.categorie');
+        $inscription->load(['formation.categorie', 'ville']);
         
         // Récupération des formations similaires (même catégorie)
         $formationsSimilaires = Formation::where('categorie_id', $inscription->formation->categorie_id)
@@ -53,10 +79,11 @@ class InscriptionController extends Controller
      */
     public function edit(Inscription $inscription): View
     {
-        $inscription->load('formation');
+        $inscription->load(['formation', 'ville']);
         $formations = Formation::orderBy('titre')->get();
+        $villes = Ville::orderBy('nom')->get();
         
-        return view('admin.inscriptions.edit', compact('inscription', 'formations'));
+        return view('admin.inscriptions.edit', compact('inscription', 'formations', 'villes'));
     }
 
     /**
@@ -72,7 +99,7 @@ class InscriptionController extends Controller
             'nom' => 'required|string|max:255',
             'prenoms' => 'required|string|max:255',
             'numero_cni' => 'required|string|max:50',
-            'ville_commune' => 'required|string|max:255',
+            'ville_id' => 'required|exists:villes,id',
             'contact' => 'required|string|max:20',
             'email' => 'required|email|max:255',
             'niveau_etude' => 'required|string|max:255',

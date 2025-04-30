@@ -139,8 +139,8 @@
                 </div>
                 
                 <div class="space-y-2">
-                    <label for="prenom" class="block text-sm font-medium text-gray-700">Prénom</label>
-                    <input type="text" id="prenom" name="prenom" value="{{ old('prenom', $inscription->prenom) }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                    <label for="prenoms" class="block text-sm font-medium text-gray-700">Prénoms</label>
+                    <input type="text" id="prenoms" name="prenoms" value="{{ old('prenoms', $inscription->prenoms) }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
                 </div>
                 
                 <!-- Email et Téléphone -->
@@ -162,13 +162,20 @@
                 
                 <!-- Ville et Pays -->
                 <div class="space-y-2">
-                    <label for="ville" class="block text-sm font-medium text-gray-700">Ville</label>
-                    <input type="text" id="ville" name="ville" value="{{ old('ville', $inscription->ville) }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                    <label for="ville_id" class="block text-sm font-medium text-gray-700">Ville</label>
+                    <select id="ville_id" name="ville_id" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                        <option value="">Sélectionnez une ville</option>
+                        @foreach($villes as $ville)
+                            <option value="{{ $ville->id }}" {{ old('ville_id', $inscription->ville_id) == $ville->id ? 'selected' : '' }}>
+                                {{ $ville->nom }}
+                            </option>
+                        @endforeach
+                    </select>
                 </div>
                 
                 <div class="space-y-2">
-                    <label for="pays" class="block text-sm font-medium text-gray-700">Pays</label>
-                    <input type="text" id="pays" name="pays" value="{{ old('pays', $inscription->pays) }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                    <label for="numero_cni" class="block text-sm font-medium text-gray-700">Numéro CNI</label>
+                    <input type="text" id="numero_cni" name="numero_cni" value="{{ old('numero_cni', $inscription->numero_cni) }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
                 </div>
                 
                 <!-- Commentaire -->

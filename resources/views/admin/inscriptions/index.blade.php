@@ -15,21 +15,32 @@
         
         <!-- Boutons d'actions et filtres -->
         <div class="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
-            <select id="status-filter" class="rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 text-sm">
+            <select id="status-filter" name="statut" class="rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 text-sm">
                 <option value="all">Tous les statuts</option>
-                <option value="en_attente">En attente</option>
-                <option value="confirmé">Confirmés</option>
-                <option value="annulé">Annulés</option>
+                <option value="en_attente" {{ request('statut') == 'en_attente' ? 'selected' : '' }}>En attente</option>
+                <option value="confirmé" {{ request('statut') == 'confirmé' ? 'selected' : '' }}>Confirmés</option>
+                <option value="annulé" {{ request('statut') == 'annulé' ? 'selected' : '' }}>Annulés</option>
+            </select>
+            
+            <select id="ville-filter" name="ville_id" class="rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 text-sm">
+                <option value="">Toutes les villes</option>
+                @foreach($villes as $ville)
+                    <option value="{{ $ville->id }}" {{ request('ville_id') == $ville->id ? 'selected' : '' }}>{{ $ville->nom }}</option>
+                @endforeach
             </select>
             
             <div class="relative">
-                <input type="text" id="search-inscriptions" placeholder="Rechercher..." class="pl-10 w-full sm:w-64 rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 text-sm">
+                <input type="text" id="search-inscriptions" name="search" value="{{ request('search') }}" placeholder="Rechercher..." class="pl-10 w-full sm:w-64 rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 text-sm">
                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                     <svg class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                     </svg>
                 </div>
             </div>
+            
+            <button id="apply-filters" class="bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-4 rounded-md text-sm transition-colors duration-300">
+                Filtrer
+            </button>
         </div>
     </div>
 
@@ -127,6 +138,7 @@
                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nom complet</th>
                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Formation</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ville</th>
                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Contact</th>
                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Statut</th>
                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
@@ -143,8 +155,17 @@
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                             <div class="flex flex-col">
                                 <span class="font-medium text-gray-900">{{ $inscription->formation->titre }}</span>
-                                <span class="text-xs text-gray-500">{{ $inscription->formation->categorie->nom }}</span>
+                                <span class="text-xs text-gray-500">{{ $inscription->formation->categorie->nom ?? 'N/A' }}</span>
                             </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                <svg class="h-3.5 w-3.5 mr-1 text-blue-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                                </svg>
+                                {{ $inscription->ville->nom ?? 'N/A' }}
+                            </span>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                             <div class="flex flex-col">
@@ -209,7 +230,7 @@
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="7" class="px-6 py-10 text-center text-gray-500">
+                        <td colspan="8" class="px-6 py-10 text-center text-gray-500">
                             <div class="flex flex-col items-center justify-center">
                                 <svg class="h-12 w-12 text-gray-300 mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
@@ -225,9 +246,9 @@
         </div>
     </div>
 
-    <!-- Pagination -->
+    <!-- Pagination avec préservation des filtres -->
     <div class="mt-4">
-        {{ $inscriptions->links() }}
+        {{ $inscriptions->appends(request()->query())->links() }}
     </div>
 
     <!-- Graphique et statistiques -->
@@ -280,60 +301,53 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Filtrage par statut
+        // Gestion du formulaire de filtrage
         const statusFilter = document.getElementById('status-filter');
-        const rows = document.querySelectorAll('.inscription-row');
+        const villeFilter = document.getElementById('ville-filter');
         const searchInput = document.getElementById('search-inscriptions');
+        const applyFiltersBtn = document.getElementById('apply-filters');
         
-        function filterTable() {
-            const selectedStatus = statusFilter.value;
-            const searchTerm = searchInput.value.toLowerCase();
+        // Application des filtres lors du clic sur le bouton
+        applyFiltersBtn.addEventListener('click', function() {
+            applyFilters();
+        });
+        
+        // Application des filtres sur la pression de la touche Entrée dans le champ de recherche
+        searchInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                applyFilters();
+            }
+        });
+        
+        function applyFilters() {
+            const params = new URLSearchParams();
             
-            let pending = 0;
-            let confirmed = 0;
-            let canceled = 0;
-            let visible = 0;
+            if (statusFilter.value && statusFilter.value !== 'all') {
+                params.append('statut', statusFilter.value);
+            }
             
-            rows.forEach(row => {
-                const status = row.dataset.status;
-                const rowText = row.textContent.toLowerCase();
-                const statusMatch = selectedStatus === 'all' || status === selectedStatus;
-                const searchMatch = rowText.includes(searchTerm);
-                
-                if (statusMatch && searchMatch) {
-                    row.classList.remove('hidden');
-                    visible++;
-                    
-                    if (status === 'en_attente') pending++;
-                    if (status === 'confirmé') confirmed++;
-                    if (status === 'annulé') canceled++;
-                } else {
-                    row.classList.add('hidden');
-                }
-            });
+            if (villeFilter.value) {
+                params.append('ville_id', villeFilter.value);
+            }
             
-            // Mettre à jour les compteurs
-            document.getElementById('pending-count').textContent = pending;
-            document.getElementById('confirmed-count').textContent = confirmed;
-            document.getElementById('canceled-count').textContent = canceled;
+            if (searchInput.value.trim()) {
+                params.append('search', searchInput.value.trim());
+            }
+            
+            // Redirection avec les paramètres de filtrage
+            window.location.href = `${window.location.pathname}?${params.toString()}`;
         }
         
-        statusFilter.addEventListener('change', filterTable);
-        searchInput.addEventListener('keyup', filterTable);
-        
-        // Auto-disparition des alertes après 5 secondes
+        // Alerte qui disparaît après quelques secondes
         const alerts = document.querySelectorAll('.fade-out-alert');
-        if (alerts.length > 0) {
+        alerts.forEach(alert => {
             setTimeout(() => {
-                alerts.forEach(alert => {
-                    alert.style.opacity = '0';
-                    alert.style.transition = 'opacity 1s';
-                    setTimeout(() => {
-                        alert.remove();
-                    }, 1000);
-                });
-            }, 5000);
-        }
+                alert.classList.add('opacity-0');
+                setTimeout(() => {
+                    alert.style.display = 'none';
+                }, 500);
+            }, 3000);
+        });
         
         // Graphique des inscriptions sur les 6 derniers mois
         const ctx = document.getElementById('inscriptions-chart').getContext('2d');
